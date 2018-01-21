@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "Starting Packages Server ..."
+
+/etc/init.d/apache2 restart
+
+mini-dinstall --config=/var/www/debian/mini-dinstall/mini-dinstall.conf
+tail -f /var/log/apache2/error.log /var/www/debian/mini-dinstall/mini-dinstall.log

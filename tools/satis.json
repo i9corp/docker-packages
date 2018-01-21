@@ -1,0 +1,13 @@
+{
+    "name": "Private Composer Mirror",
+    "homepage": "http://localhost:8080",
+ 
+    "repositories": [
+        { "type": "composer", "url": "https://packagist.org" }
+    ],
+ 
+    "require": {
+        "composer/satis": "*"
+    },
+    "require-dependencies": true
+}
