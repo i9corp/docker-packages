@@ -1,0 +1,13 @@
+server {
+    server_name debian.i9corp.com.br;
+    access_log /var/log/nginx/debian.access.log;
+    location / {
+        root /etc/i9corp/packages/debian/;
+        autoindex on;
+    }
+    location  /mini-dinstall {
+        deny all;
+        return 404;
+    }
+}
+

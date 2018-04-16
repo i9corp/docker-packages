@@ -1,30 +1,28 @@
 FROM debian:9.2
 
 RUN apt-get update
-RUN apt-get install -y wget unzip git curl php mini-dinstall apache2 php php-xml php-mbstring dos2unix
+RUN apt-get install -y wget unzip git curl mini-dinstall dos2unix dput nginx
 RUN apt-get clean
 
-COPY ./tools/composer.phar /usr/local/bin/composer
-RUN chmod +x /usr/local/bin/composer
-
-RUN mkdir -p /var/www/composer
-RUN composer create-project composer/satis --stability=dev --keep-vcs /var/www/composer
-COPY ./tools/satis.json /var/www/composer/satis.json
-RUN /var/www/composer/bin/satis build /var/www/composer/satis.json /var/www/composer/release/
-
-RUN mkdir -p /var/www/debian/mini-dinstall/incoming
-COPY ./tools/mini-dinstall.conf /var/www/debian/mini-dinstall/mini-dinstall.conf
-COPY ./tools/000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY ./tools/start-packages /usr/local/bin/start-packages
 RUN dos2unix /usr/local/bin/start-packages
 RUN chmod +x /usr/local/bin/start-packages
-RUN chown -R www-data:www-data /var/www
-RUN echo "ServerName localhost" | tee /etc/apache2/conf-available/fqdn.conf
-COPY ./tools/dos2unix_7.3.4-3_amd64.deb /var/www/debian/mini-dinstall/incoming
-RUN a2enmod rewrite
-RUN a2enconf fqdn
 
-VOLUME [ "/var/www/" ]
+ARG ROOT_DIR=/etc/i9corp/packages
+ARG DEBIAN_DIR=${ROOT_DIR}/debian
+
+RUN mkdir -p ${DEBIAN_DIR}/mini-dinstall/incoming
+COPY ./.mini-dinstall.conf ${DEBIAN_DIR}/.mini-dinstall.conf  
+ 
+COPY ./signing.asc ${DEBIAN_DIR}/
+COPY ./dput.cf /root/.dput.cf
+
+COPY ./nginx/debian /etc/nginx/sites-available/debian
+RUN unlink /etc/nginx/sites-enabled/default
+RUN ln -s /etc/nginx/sites-available/debian /etc/nginx/sites-enabled/default
+RUN ln -s ${DEBIAN_DIR}/.mini-dinstall.conf /etc/mini-dinstall.conf
+
+VOLUME [ "${DEBIAN_DIR}/mini-dinstall/incoming" ]
 
 # Debian
 EXPOSE 80
