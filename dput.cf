@@ -1,6 +1,6 @@
-[local]
-fqdn = repo.i9corp.com.br
-method = local
+[ssh]
+fqdn = 10.224.100.12
+method = ssh
 incoming = ~/archive/mini-dinstall/incoming
 allow_unsigned_uploads = 1
 post_upload_command = mini-dinstall --batch
