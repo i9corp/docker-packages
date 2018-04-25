@@ -3,7 +3,7 @@ server {
     access_log /var/log/nginx/debian.access.log;
     root /etc/i9corp/packages/;
     location / {
-        root /etc/i9corp/packages/debian/;
+        root /etc/i9corp/packages/;
         autoindex on;
     }
     location  /mini-dinstall {

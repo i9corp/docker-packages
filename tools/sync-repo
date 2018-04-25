@@ -1,0 +1,19 @@
+#!/bin/bash
+
+createrepo --update ${CENTOS_DISTRIB}/updates
+createrepo --update ${CENTOS_DISTRIB}/base
+
+apt-ftparchive packages {${DEBIAN_POOL}/updates >${DEBIAN_DIR}/updates/Packages
+gzip -kf ${DEBIAN_DIR}/updates/Packages
+
+apt-ftparchive packages {${DEBIAN_POOL}/internal >${DEBIAN_DIR}/internal/Packages
+gzip -kf ${DEBIAN_DIR}/internal/Packages
+
+apt-ftparchive packages {${DEBIAN_POOL}/non-free >${DEBIAN_DIR}/non-free/Packages
+gzip -kf ${DEBIAN_DIR}/non-free/Packages
+
+apt-ftparchive packages {${DEBIAN_POOL}/unstable >${DEBIAN_DIR}/unstable/Packages
+gzip -kf ${DEBIAN_DIR}/unstable/Packages
+
+apt-ftparchive packages {${DEBIAN_POOL}/stable >${DEBIAN_DIR}/stable/Packages
+gzip -kf ${DEBIAN_DIR}/stable/Packages
